@@ -2,6 +2,7 @@
   "name": "@lark-docs-component/monorepo",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "description": "Lark Docs Component for Vue and React",
   "workspaces": [
     "packages/*"
@@ -11,7 +12,7 @@
     "dev": "pnpm -r --parallel --filter './packages/*' run dev",
     "clean": "pnpm -r --filter './packages/*' run clean",
     "test": "pnpm -r --filter './packages/*' run test",
-    "lint": "eslint --ext .ts,.tsx,.vue packages/*/src",
+    "lint": "eslint packages/*/src",
     "format": "prettier --write \"packages/*/src/**/*.{ts,tsx,vue}\"",
     "typecheck": "pnpm -r --filter './packages/*' run typecheck",
     "changeset": "changeset",
@@ -20,15 +21,17 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.1",
+    "@eslint/js": "^9.17.0",
     "@types/node": "^20.11.16",
-    "@typescript-eslint/eslint-plugin": "^6.21.0",
-    "@typescript-eslint/parser": "^6.21.0",
-    "eslint": "^8.56.0",
-    "eslint-plugin-vue": "^9.20.1",
+    "@typescript-eslint/eslint-plugin": "^8.18.2",
+    "@typescript-eslint/parser": "^8.18.2",
+    "eslint": "^9.17.0",
+    "eslint-plugin-vue": "^9.31.0",
     "prettier": "^3.2.5",
-    "typescript": "^5.3.3",
-    "vite": "^5.0.12",
-    "vitest": "^1.2.2"
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.18.2",
+    "vite": "^7.3.1",
+    "vitest": "^2.1.8"
   },
   "engines": {
     "node": ">=16.0.0",
