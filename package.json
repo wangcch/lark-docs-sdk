@@ -1,0 +1,38 @@
+{
+  "name": "@lark-docs-component/monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Lark Docs Component for Vue and React",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "pnpm -r --filter './packages/*' run build",
+    "dev": "pnpm -r --parallel --filter './packages/*' run dev",
+    "clean": "pnpm -r --filter './packages/*' run clean",
+    "test": "pnpm -r --filter './packages/*' run test",
+    "lint": "eslint --ext .ts,.tsx,.vue packages/*/src",
+    "format": "prettier --write \"packages/*/src/**/*.{ts,tsx,vue}\"",
+    "typecheck": "pnpm -r --filter './packages/*' run typecheck",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "pnpm build && changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.1",
+    "@types/node": "^20.11.16",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "eslint": "^8.56.0",
+    "eslint-plugin-vue": "^9.20.1",
+    "prettier": "^3.2.5",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.12",
+    "vitest": "^1.2.2"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@8.15.0"
+}
