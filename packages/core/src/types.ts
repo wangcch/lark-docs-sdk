@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * Lark Docs Component SDK 类型定义
  */
@@ -405,7 +406,7 @@ export interface DocComponentOptions {
   /** 组件尺寸 */
   size?: SizeConfig;
   /** 三方鉴权 */
-  auth: AuthConfig;
+  auth?: AuthConfig;
   /** 组件内部回调 */
   onError?: (error: { code: string; msg: string }) => void;
   /** 鉴权失败回调 */

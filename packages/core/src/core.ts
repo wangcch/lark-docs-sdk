@@ -84,6 +84,7 @@ export class LarkDocsComponent {
   /**
    * 取消事件监听
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   unregister(event: DocComponentEvent | string, callback: (...args: any[]) => void): void {
     this.ensureStarted();
     this.instance!.unregister(event, callback);
