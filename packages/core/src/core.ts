@@ -3,6 +3,11 @@ import type {
   DocComponentInstance,
   FeatureConfig,
   DocComponentEvent,
+  InvokeEventType,
+  InvokeEventArgs,
+  InvokeEventReturn,
+  ListenerEventType,
+  ListenerEventCallbackPayload,
   SDKResponse,
 } from './types';
 import { loadSDK, isSDKLoaded } from './loader';
@@ -57,7 +62,10 @@ export class LarkDocsComponent {
   /**
    * 调用组件能力
    */
-  async invoke(event: DocComponentEvent | string, ...args: any[]): Promise<SDKResponse> {
+  async invoke<E extends InvokeEventType>(
+    event: E,
+    ...args: InvokeEventArgs<E>
+  ): Promise<SDKResponse<InvokeEventReturn<E>>> {
     this.ensureStarted();
     return this.instance!.invoke(event, ...args);
   }
@@ -65,7 +73,10 @@ export class LarkDocsComponent {
   /**
    * 注册事件监听
    */
-  register(event: DocComponentEvent | string, callback: (...args: any[]) => void): void {
+  register<E extends ListenerEventType>(
+    event: E,
+    callback: (payload: ListenerEventCallbackPayload<E>) => void
+  ): void {
     this.ensureStarted();
     this.instance!.register(event, callback);
   }

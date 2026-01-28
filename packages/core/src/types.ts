@@ -45,6 +45,164 @@ export enum DocComponentEvent {
   ON_ACTIVE_COMMENT = 'ON_ACTIVE_COMMENT',
 }
 
+export interface DocComponentInvokeEventPayloads {
+  [DocComponentEvent.JUMP_TO_COMMENT]: {
+    args: [{ commentId: string }];
+    data: void;
+  };
+  [DocComponentEvent.ADD_NEW_COMMENT]: {
+    args: [{ tempCommentId: string; content?: string; notify?: boolean }];
+    data: { commentId: string; replyId: string };
+  };
+  [DocComponentEvent.HAS_UNFINISHED_TASK]: {
+    args: [];
+    data: { hasUnFinishedTask: boolean; hasUnFinishedFileTask: boolean };
+  };
+  [DocComponentEvent.SCROLL_TO]: {
+    args: [value: number, style?: Record<string, string | number>];
+    data: void;
+  };
+  [DocComponentEvent.TOGGLE_REPLACE_BOX]: {
+    args: [visible?: boolean, style?: Record<string, string | number>];
+    data: void;
+  };
+  [DocComponentEvent.TOGGLE_MODAL]: {
+    args: ['CLONE' | 'DETAIL' | 'DELETE' | (string & {}), visible?: boolean];
+    data: void;
+  };
+  [DocComponentEvent.TOGGLE_PRINT_BOX]: {
+    args: [visible?: boolean];
+    data: void;
+  };
+  [DocComponentEvent.TOGGLE_SHARE_MENU]: {
+    args: [visible?: boolean, style?: Record<string, string | number>];
+    data: void;
+  };
+  [DocComponentEvent.TOGGLE_COMMENT_HISTORY]: {
+    args: [visible?: boolean];
+    data: void;
+  };
+  [DocComponentEvent.TOGGLE_HISTORY]: {
+    args: [visible?: boolean];
+    data: void;
+  };
+  [DocComponentEvent.REPORT_ABUSE]: {
+    args: [];
+    data: void;
+  };
+  [DocComponentEvent.EXPORT_BY_TYPE]: {
+    args: [format: string];
+    data: void;
+  };
+  [DocComponentEvent.TOGGLE_TRANSLATE]: {
+    args: [true, language: string];
+    data: void;
+  };
+  [DocComponentEvent.ANCHOR_JUMP]: {
+    args: [anchor: string, animate?: boolean];
+    data: void;
+  };
+  [DocComponentEvent.GET_SUITE_TITLE]: {
+    args: [];
+    data: string;
+  };
+  [DocComponentEvent.GET_CURRENT_AUTH]: {
+    args: [];
+    data: {
+      /** 是否为文档所有者 */
+      owner: boolean;
+      /** 是否有文档阅读权限 */
+      readable: boolean;
+      /** 是否有文档编辑权限 */
+      editable: boolean;
+      /** 是否有文档评论权限 */
+      commentable: boolean;
+      /** 是否有文档分享权限 */
+      shareable: boolean;
+      /** 是否有文档复制权限 */
+      copyable: boolean;
+      /** 是否有文档打印权限 */
+      printable: boolean;
+      /** 是否有文档导出权限 */
+      exportable: boolean;
+    };
+  };
+  [DocComponentEvent.GET_DIRECTORY_DATA]: {
+    args: [];
+    data: Array<{
+      /** 锚点 hash 值 (初始化时获取的数据不包含此项) */
+      anchor?: string;
+      /** 目录标题 */
+      text: string;
+      /** 缩进等级 */
+      indentLevel: number;
+    }>;
+  };
+  [DocComponentEvent.GET_ANCHOR_TOP]: {
+    args: [anchor: string];
+    data: number;
+  };
+  [DocComponentEvent.HIGHLIGHT_ANCHOR]: {
+    args: [anchor: string];
+    data: void;
+  };
+  [DocComponentEvent.GET_SUPPORTED_EXPORT_FORMATS]: {
+    args: [];
+    data: string[];
+  };
+  [DocComponentEvent.GET_TRANSLATE_LANG]: {
+    args: [];
+    data: string[];
+  };
+}
+
+export type InvokeEventType = keyof DocComponentInvokeEventPayloads | string;
+export type InvokeEventArgs<E extends InvokeEventType> =
+  E extends keyof DocComponentInvokeEventPayloads
+    ? DocComponentInvokeEventPayloads[E]['args']
+    : any[];
+export type InvokeEventReturn<E extends InvokeEventType> =
+  E extends keyof DocComponentInvokeEventPayloads
+    ? DocComponentInvokeEventPayloads[E]['data']
+    : any;
+
+export type DocComponentListenerCallbacksPayloads = {
+  [DocComponentEvent.ON_ACTIVE_COMMENT]: { commentId: string };
+  [DocComponentEvent.ON_CREATE_TEMP_COMMENT]: { quote: string; tmpCommentId: string };
+  [DocComponentEvent.DOC_EDITOR_SCROLL]: number;
+  [DocComponentEvent.SEARCH_BOX_OPEN]: { duration: number; openTimes: number };
+  [DocComponentEvent.SEARCH_CONTROLLER_READY]: {
+    searchReadyTime: number;
+    trigger_before_didmount: boolean;
+  };
+  [DocComponentEvent.IMAGE_VIEW]: {
+    key: string;
+    url: string;
+    blob: Blob;
+  };
+  [DocComponentEvent.SELECTION_CHANGE]: {
+    id: string;
+    range: [number, number];
+  }[];
+  [DocComponentEvent.DOCUMENT_HEIGHT]: number;
+  [DocComponentEvent.AUTH_CHANGE]: DocComponentInvokeEventPayloads[DocComponentEvent.GET_CURRENT_AUTH]['data'];
+  [DocComponentEvent.SUITE_TITLE_CHANGE]: string;
+  [DocComponentEvent.DIRECTORY_CHANGE]: {
+    anchor: string;
+    text: string;
+    indentLevel: number;
+  }[];
+  [DocComponentEvent.CURR_ANCHOR]: string;
+  [DocComponentEvent.FULL_SCREEN_MODE]: boolean;
+  [DocComponentEvent.TRANSLATE_CHANGE]: string;
+  [DocComponentEvent.HYPERLINK_CLICK]: string;
+};
+export type ListenerEventType = keyof DocComponentListenerCallbacksPayloads | string;
+export type ListenerEventCallbackPayload<E extends ListenerEventType> =
+  E extends keyof DocComponentListenerCallbacksPayloads
+    ? DocComponentListenerCallbacksPayloads[E]
+    : any;
+
 /** 错误类型枚举 */
 export enum ErrorType {
   NO_PERMISSION = '4',
@@ -272,11 +430,17 @@ export interface DocComponentInstance {
   /** 销毁组件 */
   destroy(): void;
   /** 调用组件能力 */
-  invoke(event: DocComponentEvent | string, ...args: any[]): Promise<SDKResponse>;
+  invoke<E extends InvokeEventType>(
+    event: E,
+    ...args: InvokeEventArgs<E>
+  ): Promise<SDKResponse<InvokeEventReturn<E>>>;
   /** 注册事件监听 */
-  register(event: DocComponentEvent | string, callback: (...args: any[]) => void): void;
+  register<E extends ListenerEventType>(
+    event: E,
+    callback: (payload: ListenerEventCallbackPayload<E>) => void
+  ): void;
   /** 取消事件监听 */
-  unregister(event: DocComponentEvent | string, callback: (...args: any[]) => void): void;
+  unregister(event: ListenerEventType, callback: (...args: any[]) => void): void;
   /** 设置功能配置 */
   setFeatureConfig(config: FeatureConfig): void;
   /** 切换文档 */
