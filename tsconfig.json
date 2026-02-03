@@ -18,5 +18,6 @@
     "declarationMap": true,
     "sourceMap": true,
     "composite": true
-  }
+  },
+  "exclude": ["eslint.config.js"]
 }
