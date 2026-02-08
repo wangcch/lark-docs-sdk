@@ -1,0 +1,49 @@
+{
+  "name": "lark-docs-sdk-vue",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Vue 3 component for Lark Docs",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite build --watch",
+    "build": "vue-tsc && vite build",
+    "clean": "rm -rf dist",
+    "typecheck": "vue-tsc --noEmit"
+  },
+  "keywords": [
+    "lark",
+    "feishu",
+    "docs",
+    "vue",
+    "vue3"
+  ],
+  "author": "",
+  "license": "MIT",
+  "peerDependencies": {
+    "vue": "^3.3.0"
+  },
+  "dependencies": {
+    "lark-docs-sdk": "workspace:*"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.3",
+    "@vue/tsconfig": "^0.5.1",
+    "typescript": "^5.7.2",
+    "vite": "^7.3.1",
+    "vite-plugin-dts": "^4.5.4",
+    "vue": "^3.4.15",
+    "vue-tsc": "^2.1.10"
+  }
+}
