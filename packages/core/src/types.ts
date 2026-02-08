@@ -68,7 +68,7 @@ export interface DocComponentInvokeEventPayloads {
     data: void;
   };
   [DocComponentEvent.TOGGLE_MODAL]: {
-    args: ['CLONE' | 'DETAIL' | 'DELETE' | (string & {}), visible?: boolean];
+    args: [modalType: 'CLONE' | 'DETAIL' | 'DELETE' | (string & {}), visible?: boolean];
     data: void;
   };
   [DocComponentEvent.TOGGLE_PRINT_BOX]: {
@@ -96,7 +96,7 @@ export interface DocComponentInvokeEventPayloads {
     data: void;
   };
   [DocComponentEvent.TOGGLE_TRANSLATE]: {
-    args: [true, language: string];
+    args: [toggle: true, language: string];
     data: void;
   };
   [DocComponentEvent.ANCHOR_JUMP]: {
